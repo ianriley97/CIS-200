@@ -1,0 +1,1087 @@
+import java.util.*;
+import java.text.*;
+import java.io.*;
+public class proj5 {
+	public static void main(String[] args) {
+	Scanner s = new Scanner(System.in);
+	//Make a do while loop to print the board over and over again
+	String[][] gameboard = new String[9][9];
+	boolean horizontalRightBoolean;
+	boolean horizontalLeftBoolean;
+	boolean verticalUpBoolean;
+	boolean verticalDownBoolean;
+	boolean diagonalUpLeftBoolean;
+	boolean diagonalUpRightBoolean;
+	boolean diagonalDownLeftBoolean;
+	boolean diagonalDownRightBoolean;
+	int i = 0;
+	int j = 0;
+	int blackTotal = 0;
+	int whiteTotal = 0;
+	int whiteForfeit = 0;
+	int blackForfeit = 0;
+	String blackInput;
+	char blackRow;
+	char blackCol;
+	int blackRowInt = 0;
+	int blackColInt = 0;
+	String whiteInput;
+	char whiteRow;
+	char whiteCol;
+	int whiteColInt = 0;
+	int whiteRowInt = 0;
+	//These positions always happen as they are the starting configuration for the game
+	gameboard[4][5] = "B";
+	gameboard[5][4] = "B";
+	gameboard[4][4] = "W";
+	gameboard[5][5] = "W";
+	//Right here make the do while
+	do {
+		for (i = 0; i < gameboard.length; i++) {
+		  	if (i != 0) {
+		  		System.out.println("-------------------------");
+		  	}
+		        for (j = 0; j < gameboard[i].length; j++) {
+			        if (i == 0 && j ==0) {
+			        		System.out.print(" ");
+			        		System.out.print("| ");
+			        	}
+			        if (j == 0 && i != 0) {
+				        	System.out.print(i);
+				        	if (j < gameboard[i].length) {
+				        		System.out.print("| ");
+				        	}
+			        }
+			        if (i == 0 && j != 0) {
+			        	System.out.print(j);
+			        	if (j < gameboard[i].length) {
+			        		System.out.print("| ");
+			        	}
+			        }
+			        else if (i != 0 && j != 0) {
+			        	if (gameboard[i][j] != null) {
+				            if (j < gameboard[i].length) {
+				            	System.out.print(gameboard[i][j]);
+				                System.out.print("| ");
+				            }
+			        	}
+			        	else {
+			        		if (j < gameboard[i].length) {
+				                System.out.print(" | ");
+			        		}
+			       		}
+			        } 
+		    	}
+	    System.out.println();
+		} //This is the end of the printing statement for the board
+		System.out.println("Enter the row,column of black's move (Press Enter to forfeit): ");
+		blackInput = s.nextLine();
+		blackRow = blackInput.charAt(0);
+		blackRowInt = (int)(blackRow - '0');
+		blackCol = blackInput.charAt(2);
+		blackColInt = (int)(blackCol - '0');
+		//System.out.print(blackRowInt + " " + blackColInt);
+		horizontalRightBoolean = blackHorizontalCheckRight(blackRowInt, blackColInt, gameboard);
+		horizontalLeftBoolean = blackHorizontalCheckLeft(blackRowInt, blackColInt, gameboard);
+		verticalUpBoolean = blackVerticalCheckUp(blackRowInt, blackColInt, gameboard);
+		verticalDownBoolean = blackVerticalCheckDown(blackRowInt, blackColInt, gameboard);
+		diagonalUpLeftBoolean = blackDiagonalCheckUpLeft(blackRowInt, blackColInt, gameboard);
+		diagonalUpRightBoolean = blackDiagonalCheckUpRight(blackRowInt, blackColInt, gameboard);
+		diagonalDownLeftBoolean = blackDiagonalCheckDownLeft(blackRowInt, blackColInt, gameboard);
+		diagonalDownRightBoolean = blackDiagonalCheckDownRight(blackRowInt, blackColInt, gameboard);
+		if (blackInput.equals("")) {
+			blackForfeit = 1;
+		}
+		if (horizontalRightBoolean == false && horizontalLeftBoolean == false && verticalUpBoolean == false && verticalDownBoolean == false && diagonalDownRightBoolean == false && diagonalDownLeftBoolean == false && diagonalUpRightBoolean == false && diagonalUpLeftBoolean == false) {
+			System.out.println("Invalid Move");
+		}
+		if (horizontalRightBoolean == true) {
+			gameboard = blackHorizontalFlipRight(blackRowInt, blackColInt, gameboard);
+		}
+		if (horizontalLeftBoolean == true) {
+			gameboard = blackHorizontalFlipLeft(blackRowInt, blackColInt, gameboard);
+		}
+		if (verticalUpBoolean == true) {
+			gameboard = blackVerticalFlipUp(blackRowInt, blackColInt, gameboard);
+		}
+		if (verticalDownBoolean == true) {
+			gameboard = blackVerticalFlipDown(blackRowInt, blackColInt, gameboard);
+		}
+		if (diagonalUpLeftBoolean == true) {
+			gameboard = blackDiagonalFlipUpLeft(blackRowInt, blackColInt, gameboard);
+		}
+		if (diagonalUpRightBoolean == true) {
+			gameboard = blackDiagonalFlipUpRight(blackRowInt, blackColInt, gameboard);
+		}
+		if (diagonalDownLeftBoolean == true) {
+			gameboard = blackDiagonalFlipDownLeft(blackRowInt, blackColInt, gameboard);
+		}
+		if (diagonalDownRightBoolean == true) {
+			gameboard = blackDiagonalFlipDownRight(blackRowInt, blackColInt, gameboard);
+		}
+		for (i = 0; i < gameboard.length; i++) {
+		  	if (i != 0) {
+		  		System.out.println("-------------------------");
+		  	}
+		        for (j = 0; j < gameboard[i].length; j++) {
+			        if (i == 0 && j ==0) {
+			        		System.out.print(" ");
+			        		System.out.print("| ");
+			        	}
+			        if (j == 0 && i != 0) {
+				        	System.out.print(i);
+				        	if (j < gameboard[i].length) {
+				        		System.out.print("| ");
+				        	}
+			        }
+			        if (i == 0 && j != 0) {
+			        	System.out.print(j);
+			        	if (j < gameboard[i].length) {
+			        		System.out.print("| ");
+			        	}
+			        }
+			        else if (i != 0 && j != 0) {
+			        	if (gameboard[i][j] != null) {
+				            if (j < gameboard[i].length) {
+				            	System.out.print(gameboard[i][j]);
+				                System.out.print("| ");
+				            }
+			        	}
+			        	else {
+			        		if (j < gameboard[i].length) {
+				                System.out.print(" | ");
+			        		}
+			       		}
+			        } 
+		    	}
+	    System.out.println();
+		}
+		System.out.println("Enter the row,column of white's move (Press Enter to forfeit): ");
+		whiteInput = s.nextLine();
+		whiteRow = whiteInput.charAt(0);
+		whiteRowInt = (int)(whiteRow - '0');
+		whiteCol = whiteInput.charAt(2);
+		whiteColInt = (int)(whiteCol - '0');
+		horizontalRightBoolean = whiteHorizontalCheckRight(whiteRowInt, whiteColInt, gameboard);
+		horizontalLeftBoolean = whiteHorizontalCheckLeft(whiteRowInt, whiteColInt, gameboard);
+		verticalUpBoolean = whiteVerticalCheckUp(whiteRowInt, whiteColInt, gameboard);
+		verticalDownBoolean = whiteVerticalCheckDown(whiteRowInt, whiteColInt, gameboard);
+		diagonalUpLeftBoolean = whiteDiagonalCheckUpLeft(whiteRowInt, whiteColInt, gameboard);
+		diagonalUpRightBoolean = whiteDiagonalCheckUpRight(whiteRowInt, whiteColInt, gameboard);
+		diagonalDownLeftBoolean = whiteDiagonalCheckDownLeft(whiteRowInt, whiteColInt, gameboard);
+		diagonalDownRightBoolean = whiteDiagonalCheckDownRight(whiteRowInt, whiteColInt, gameboard);
+		if (whiteInput.equals("")) {
+			whiteForfeit = 1;
+		}
+		if (horizontalRightBoolean == false && horizontalLeftBoolean == false && verticalUpBoolean == false && verticalDownBoolean == false && diagonalDownRightBoolean == false && diagonalDownLeftBoolean == false && diagonalUpRightBoolean == false && diagonalUpLeftBoolean == false) {
+			System.out.println("Invalid Move");
+		}
+		if (horizontalRightBoolean == true) {
+			gameboard = whiteHorizontalFlipRight(whiteRowInt, whiteColInt, gameboard);
+		}
+		if (horizontalLeftBoolean == true) {
+			gameboard = whiteHorizontalFlipLeft(whiteRowInt, whiteColInt, gameboard);
+		}
+		if (verticalUpBoolean == true) {
+			gameboard = whiteVerticalFlipUp(whiteRowInt, whiteColInt, gameboard);
+		}
+		if (verticalDownBoolean == true) {
+			gameboard = whiteVerticalFlipDown(whiteRowInt, whiteColInt, gameboard);
+		}
+		if (diagonalUpLeftBoolean == true) {
+			gameboard = whiteDiagonalFlipUpLeft(whiteRowInt, whiteColInt, gameboard);
+		}
+		if (diagonalUpRightBoolean == true) {
+			gameboard = whiteDiagonalFlipUpRight(whiteRowInt, whiteColInt, gameboard);
+		}
+		if (diagonalDownLeftBoolean == true) {
+			gameboard = whiteDiagonalFlipDownLeft(whiteRowInt, whiteColInt, gameboard);
+		}
+		if (diagonalDownRightBoolean == true) {
+			gameboard = whiteDiagonalFlipDownRight(whiteRowInt, whiteColInt, gameboard);
+		}
+		for (i = 0; i < gameboard.length; i++) {
+		  	if (i != 0) {
+		  		System.out.println("-------------------------");
+		  	}
+		        for (j = 0; j < gameboard[i].length; j++) {
+			        if (i == 0 && j ==0) {
+			        		System.out.print(" ");
+			        		System.out.print("| ");
+			        	}
+			        if (j == 0 && i != 0) {
+				        	System.out.print(i);
+				        	if (j < gameboard[i].length) {
+				        		System.out.print("| ");
+				        	}
+			        }
+			        if (i == 0 && j != 0) {
+			        	System.out.print(j);
+			        	if (j < gameboard[i].length) {
+			        		System.out.print("| ");
+			        	}
+			        }
+			        else if (i != 0 && j != 0) {
+			        	if (gameboard[i][j] != null) {
+				            if (j < gameboard[i].length) {
+				            	System.out.print(gameboard[i][j]);
+				                System.out.print("| ");
+				            }
+			        	}
+			        	else {
+			        		if (j < gameboard[i].length) {
+				                System.out.print(" | ");
+			        		}
+			       		}
+			        } 
+		    	}
+	    System.out.println();
+		}
+		for (int a = 1; a <= 8; a++) {
+			for (int b = 1; b <= 8; b++) {
+				if (gameboard[a][b] == null) {
+					continue;
+				}
+				else if (gameboard[a][b] == "B") {
+					blackTotal++;
+				}
+				else if (gameboard[a][b] == "W") {
+					whiteTotal++;
+				}
+			}
+		}
+	}
+	//end the do while loop
+	while (whiteForfeit == 0 && blackForfeit == 0);
+	System.out.println("Game over");
+	System.out.println("Black: " + blackTotal);
+	System.out.println("White: " + whiteTotal);
+	if (blackTotal > whiteTotal) {
+		System.out.println("Winner: Black");
+	}
+	else if (whiteTotal > blackTotal) {
+		System.out.println("Winner: White");
+	}
+	else if (blackTotal == whiteTotal) {
+		System.out.println("It's a draw");
+	}
+	}
+
+
+
+/**
+This section will be able he checking if a move is legal and how to flip notes from class
+Checking:
+To check make sure it's in bounds and not already occupied
+Check all adjacent surroundings 8 places
+First look for something of the opposite color
+Keep looping in the direction of the first opposite color until you find a piece of the same color
+Next step is to flip the pieces
+
+**/
+//Make seperate methods to check Vertical Horizontal and Diagonal to check if they're valid moves
+//Naming conventions for variables: color(orientation)(left/right/up/down)
+/**
+These are black piece checking statements in all directions
+**/
+	public static boolean blackHorizontalCheckRight(int blackRowInt, int blackColInt, String gameboard[][]) {
+		int found = 0;
+		int count = 1;
+		boolean blackHRAllowed = true;
+		if (blackColInt + 1 > 8) {
+			blackHRAllowed = false;
+		}
+		else if (gameboard[blackRowInt][blackColInt + 1] == null) {
+			blackHRAllowed = false;
+		}
+		else if (gameboard[blackRowInt][blackColInt + 1].contains("W")) {
+			while (found == 0) {
+				if (gameboard[blackRowInt][blackColInt + count].contains("B")) {
+					found = 1;
+				}
+				else if (gameboard[blackRowInt][blackColInt + count].contains("W")) {
+					count++;
+				}
+				else if (blackColInt + count > 8) {
+					blackHRAllowed = false;
+				}
+			}
+		}
+		else {
+			blackHRAllowed = false;
+		}
+		return blackHRAllowed;
+	}
+	public static boolean blackHorizontalCheckLeft(int blackRowInt, int blackColInt, String gameboard[][]) {
+		int found = 0;
+		int count = 1;
+		boolean blackHLAllowed = true;
+		if (blackColInt - 1 < 1) {
+			blackHLAllowed = false;
+		}
+		else if (gameboard[blackRowInt][blackColInt - 1] == null) {
+			blackHLAllowed = false;
+		}
+		else if (gameboard[blackRowInt][blackColInt - 1].contains("W")) {
+			while (found == 0) {
+				if (gameboard[blackRowInt][blackColInt - count].contains("B")) {
+					found = 1;
+				}
+				else if (gameboard[blackRowInt][blackColInt - count].contains("W")) {
+					count++;
+				}
+				else if (blackColInt - count < 1) {
+					blackHLAllowed = false;
+				}
+			}
+		}
+		else {
+			blackHLAllowed = false;
+		}
+		return blackHLAllowed;
+	}
+	public static boolean blackVerticalCheckUp(int blackRowInt, int blackColInt, String gameboard[][]) {
+		int found = 0;
+		int count = 1;
+		boolean blackVUAllowed = true;
+		if (blackRowInt + 1 > 8) {
+			blackVUAllowed = false;
+		}
+		else if (gameboard[blackRowInt + 1][blackColInt] == null) {
+			blackVUAllowed = false;
+		}
+		else if (gameboard[blackRowInt + 1][blackColInt].contains("W")) {
+			
+			while (found == 0) {
+				if (gameboard[blackRowInt + count][blackColInt].contains("B")) {
+					found = 1;
+				}
+				else if (gameboard[blackRowInt + count][blackColInt].contains("W")) {
+					count++;
+				}
+				else if (blackRowInt + count < 1) {
+					blackVUAllowed = false;
+				}
+			}
+		}
+		else {
+			blackVUAllowed = false;
+		}
+		return blackVUAllowed;
+	}
+	public static boolean blackVerticalCheckDown(int blackRowInt, int blackColInt, String gameboard[][]) {
+		int found = 0;
+		int count = 1;
+		boolean blackVDAllowed = true;
+		if (blackRowInt - 1 < 1) {
+			blackVDAllowed = false;
+		}
+		else if (gameboard[blackRowInt - 1][blackColInt] == null) {
+			blackVDAllowed = false;
+		}
+		else if (gameboard[blackRowInt - 1][blackColInt].contains("W")) {
+			while (found == 0) {
+				if (gameboard[blackRowInt - count][blackColInt].contains("B")) {
+					found = 1;
+				}
+				else if (gameboard[blackRowInt - count][blackColInt].contains("W")) {
+					count++;
+				}
+				else if (blackRowInt + count >= 8) {
+					blackVDAllowed = false;
+				}
+			}
+		}
+		else {
+			blackVDAllowed = false;
+		}
+		return blackVDAllowed;
+	}
+	public static boolean blackDiagonalCheckUpLeft(int blackRowInt, int blackColInt, String gameboard[][]) {
+		int found = 0;
+		int count = 1;
+		boolean blackDULAllowed = true;
+		if (blackRowInt - 1 < 1 || blackColInt - 1 < 1) {
+			blackDULAllowed = false;
+		}
+		else if (gameboard[blackRowInt - 1][blackColInt - 1] == null) {
+					blackDULAllowed = false;
+		}
+		else if (gameboard[blackRowInt - 1][blackColInt - 1].contains("W")) {
+			while (found == 0) {
+				if (gameboard[blackRowInt - count][blackColInt - count].contains("B")) {
+					found = 1;
+				}
+				else if (gameboard[blackRowInt - count][blackColInt - count].contains("W")) {
+					count++;
+				}
+				else if (blackRowInt + count < 1 || blackColInt < 1) {
+					blackDULAllowed = false;
+				}
+			}
+		}
+		else {
+			blackDULAllowed = false;
+		}
+		return blackDULAllowed;
+	}
+	public static boolean blackDiagonalCheckUpRight(int blackRowInt, int blackColInt, String gameboard[][]) {
+		int found = 0;
+		int count = 1;
+		boolean blackDURAllowed = true;
+		if (blackRowInt - 1 < 1 || blackColInt + 1 > 8) {
+			blackDURAllowed = false;
+		}
+		else if (gameboard[blackRowInt - 1][blackColInt + 1] == null) {
+			blackDURAllowed = false;
+			}
+		else if (gameboard[blackRowInt - 1][blackColInt + 1].contains("W")) {
+			while (found == 0) {
+				if (gameboard[blackRowInt - count][blackColInt + count].contains("B")) {
+					found = 1;
+				}
+				else if (gameboard[blackRowInt - count][blackColInt + count].contains("W")) {
+					count++;
+				}
+				else if (blackRowInt + count < 1 || blackColInt + count >= 8 ) {
+					blackDURAllowed = false;
+				}
+			}
+		}
+		else {
+			blackDURAllowed = false;
+		}
+		return blackDURAllowed;
+	}
+	public static boolean blackDiagonalCheckDownLeft(int blackRowInt, int blackColInt, String gameboard[][]) {
+		int found = 0;
+		int count = 1;
+		boolean blackDDLAllowed = true;
+		if (blackRowInt + 1 > 8 || blackColInt - 1 < 1) {
+			blackDDLAllowed = false;
+		}
+		else if (gameboard[blackRowInt + 1][blackColInt - 1] == null) {
+			blackDDLAllowed = false;
+		}
+		else if (gameboard[blackRowInt + 1][blackColInt - 1].contains("W")) {
+			while (found == 0) {
+				if (gameboard[blackRowInt + count][blackColInt - count].contains("B")) {
+					found = 1;
+				}
+				else if (gameboard[blackRowInt + count][blackColInt - count].contains("W")){
+					count++;
+				}
+				else if (blackRowInt + count >= 8 || blackColInt - count < 1 ) {
+					blackDDLAllowed = false;
+				}
+			}
+		}
+		else {
+			blackDDLAllowed = false;
+		}
+		return blackDDLAllowed;
+	}
+	public static boolean blackDiagonalCheckDownRight(int blackRowInt, int blackColInt, String gameboard[][]) {
+		int found = 0;
+		int count = 1;
+		boolean blackDDRAllowed = true;
+		if (blackRowInt + 1 > 8 || blackColInt + 1 > 8) {
+			blackDDRAllowed = false;
+		}
+		else if (gameboard[blackRowInt + 1][blackColInt + 1] == null) {
+			blackDDRAllowed = false;
+		}
+		else if (gameboard[blackRowInt + 1][blackColInt + 1].contains("W")) {
+			while (found == 0) {
+				if (gameboard[blackRowInt + count][blackColInt + count].contains("B")) {
+					found = 1;
+				}
+				else if (gameboard[blackRowInt + count][blackColInt + count].contains("W")){
+					count++;
+				}
+				else if (blackRowInt + count >= 8 || blackColInt + count >= 8 ) {
+					blackDDRAllowed = false;
+				}
+			}
+		}
+		else {
+			blackDDRAllowed = false;
+		}
+		return blackDDRAllowed;
+	}
+	/**
+	 This is the end of the black checking section
+
+
+
+	**/
+	/**
+	This is the beginning of the white checking section
+
+
+
+	**/
+	public static boolean whiteHorizontalCheckRight(int whiteRowInt, int whiteColInt, String gameboard[][]) {
+		int found = 0;
+		int count = 1;
+		boolean whiteHRAllowed = true;
+		if (whiteColInt + 1 > 8) {
+			whiteHRAllowed = false;
+		}
+		else if (gameboard[whiteRowInt][whiteColInt + 1] == null) {
+			whiteHRAllowed = false;
+		}
+		else if (gameboard[whiteRowInt][whiteColInt + 1].contains("B")) {
+			while (found == 0) {
+				if (gameboard[whiteRowInt][whiteColInt + count].contains("W")) {
+					found = 1;
+				}
+				else if (gameboard[whiteRowInt][whiteColInt + count].contains("B")) {
+					count++;
+				}
+				else if (whiteColInt + count >= 8) {
+					whiteHRAllowed = false;
+				}
+			}
+		}
+		else {
+			whiteHRAllowed = false;
+		}
+		return whiteHRAllowed;
+	}
+	public static boolean whiteHorizontalCheckLeft(int whiteRowInt, int whiteColInt, String gameboard[][]) {
+		int found = 0;
+		int count = 1;
+		boolean whiteHLAllowed = true;
+		if (whiteColInt - 1 < 1) {
+			whiteHLAllowed = false;
+		}
+		else if (gameboard[whiteRowInt][whiteColInt - 1] == null) {
+			whiteHLAllowed = false;
+		}		
+		else if (gameboard[whiteRowInt][whiteColInt - 1].contains("B")) {
+			while (found == 0) {				
+				if (gameboard[whiteRowInt][whiteColInt - count].contains("W")) {
+					found = 1;
+				}
+				else if (gameboard[whiteRowInt][whiteColInt - count].contains("B")) {
+					count++;
+				}
+				else if (whiteColInt - count < 1) {
+					whiteHLAllowed = false;
+				}
+			}
+		}
+		else {
+			whiteHLAllowed = false;
+		}
+		return whiteHLAllowed;
+	}
+	public static boolean whiteVerticalCheckUp(int whiteRowInt, int whiteColInt, String gameboard[][]) {
+		int found = 0;
+		int count = 1;
+		boolean whiteVUAllowed = true;
+		if (whiteRowInt - 1 < 1) {
+			whiteVUAllowed = false;
+		}
+		else if (gameboard[whiteRowInt - 1][whiteColInt] == null) {
+			whiteVUAllowed = false;
+		}
+		else if (gameboard[whiteRowInt - 1][whiteColInt].contains("B")) {
+			while (found == 0) {
+				if (gameboard[whiteRowInt - count][whiteColInt].contains("W")) {
+					found = 1;
+				}
+				else if (gameboard[whiteRowInt - count][whiteColInt].contains("B")) {
+					count++;
+				}
+				else if (whiteRowInt - count < 1) {
+					whiteVUAllowed = false;
+				}
+			}
+		}
+		else {
+			whiteVUAllowed = false;
+		}
+		return whiteVUAllowed;
+	}
+	public static boolean whiteVerticalCheckDown(int whiteRowInt, int whiteColInt, String gameboard[][]) {
+		int found = 0;
+		int count = 1;
+		boolean whiteVDAllowed = true;
+		if (whiteRowInt + 1 > 8) {
+			whiteVDAllowed = false;
+		}
+		else if (gameboard[whiteRowInt + 1][whiteColInt] == null) {
+			whiteVDAllowed = false;
+		}
+		else if (gameboard[whiteRowInt + 1][whiteColInt].contains("B")) {			
+			while (found == 0) {				
+				if (gameboard[whiteRowInt + count][whiteColInt].contains("W")) {
+					found = 1;
+				}
+				else if (gameboard[whiteRowInt + count][whiteColInt].contains("B")) {
+					count++;
+				}
+				else if (whiteRowInt + count >= 8) {
+					whiteVDAllowed = false;
+				}
+			}
+		}
+		else {
+			whiteVDAllowed = false;
+		}
+		return whiteVDAllowed;
+	}
+	public static boolean whiteDiagonalCheckUpLeft(int whiteRowInt, int whiteColInt, String gameboard[][]) {
+		int found = 0;
+		int count = 1;
+		boolean whiteDULAllowed = true;
+		if (whiteRowInt - 1 < 1 || whiteColInt - 1 < 1) {
+			whiteDULAllowed = false;
+		}
+		else if (gameboard[whiteRowInt - 1][whiteColInt - 1] == null) {
+			whiteDULAllowed = false;
+		}
+		else if (gameboard[whiteRowInt - 1][whiteColInt - 1].contains("B")) {
+			while (found == 0) {
+				if (gameboard[whiteRowInt - count][whiteColInt - count].contains("W")) {
+					found = 1;
+				}
+				else if (gameboard[whiteRowInt - count][whiteColInt - count].contains("B")) {
+					count++;
+				}
+				else if (whiteRowInt - count < 1 || whiteColInt - count < 1) {
+					whiteDULAllowed = false;
+				}
+			}
+		}
+		else {
+			whiteDULAllowed = false;
+		}
+		return whiteDULAllowed;
+	}
+	public static boolean whiteDiagonalCheckUpRight(int whiteRowInt, int whiteColInt, String gameboard[][]) {
+		int found = 0;
+		int count = 1;
+		boolean whiteDURAllowed = true;
+		if (whiteRowInt - 1 < 1 || whiteColInt + 1 > 8) {
+			whiteDURAllowed = false;
+		}
+		else if (gameboard[whiteRowInt - 1][whiteColInt + 1] == null) {
+			whiteDURAllowed = false;
+		}
+		else if (gameboard[whiteRowInt - 1][whiteColInt + 1].contains("B")) {
+			while (found == 0) {
+				if (gameboard[whiteRowInt - count][whiteColInt + count].contains("W")) {
+					found = 1;
+				}
+				else if (gameboard[whiteRowInt - count][whiteColInt + count].contains("B")) {
+					count++;
+				}
+				else if (whiteRowInt - count < 1 || whiteColInt + count >= 8) {
+					whiteDURAllowed = false;
+				}
+			}
+		}
+		else {
+			whiteDURAllowed = false;
+		}
+		return whiteDURAllowed;
+	}
+	public static boolean whiteDiagonalCheckDownLeft(int whiteRowInt, int whiteColInt, String gameboard[][]) {
+		int found = 0;
+		int count = 1;
+		boolean whiteDDLAllowed = true;
+		if (whiteRowInt + 1 > 8 || whiteColInt - 1 < 1) {
+			whiteDDLAllowed = false;
+		}
+		else if (gameboard[whiteRowInt + 1][whiteColInt - 1] == null) {
+			whiteDDLAllowed = false;
+		}
+				else if (gameboard[whiteRowInt + 1][whiteColInt - 1].contains("B")) {
+			while (found == 0) {
+				if (gameboard[whiteRowInt + count][whiteColInt - count].contains("W")) {
+					found = 1;
+				}
+				else if (gameboard[whiteRowInt + count][whiteColInt - count].contains("B")) {
+					count++;
+				}
+				else if (whiteRowInt + count >= 8 || whiteColInt - count < 1) {
+					whiteDDLAllowed = false;
+				}
+			}
+		}
+		else {
+			whiteDDLAllowed = false;
+		}
+		return whiteDDLAllowed;
+	}
+	public static boolean whiteDiagonalCheckDownRight(int whiteRowInt, int whiteColInt, String gameboard[][]) {
+		int found = 0;
+		int count = 1;
+		boolean whiteDDRAllowed = true;
+		if (whiteRowInt + 1 > 8 || whiteColInt + 1 > 8) {
+			whiteDDRAllowed = false;
+		}
+		else if (gameboard[whiteRowInt + 1][whiteColInt + 1] == null) {
+			whiteDDRAllowed = false;
+		}
+		else if (gameboard[whiteRowInt + 1][whiteColInt + 1].contains("B")) {
+			while (found == 0) {
+				if (gameboard[whiteRowInt + count][whiteColInt + count].contains("W")) {
+					found = 1;
+				}
+				else if (gameboard[whiteRowInt + count][whiteColInt + count].contains("B")) {
+					count++;
+				}
+				else if (whiteRowInt + count > 8 || whiteColInt + count > 8) {
+					whiteDDRAllowed = false;
+				}
+			}
+		}
+		else {
+			whiteDDRAllowed = false;
+		}
+		return whiteDDRAllowed;
+	}
+	/**
+
+
+
+
+
+	This is the end of the white checking methods
+
+
+
+
+	**/
+	/**
+
+
+
+
+
+	This is the black flipping section
+
+
+
+
+	**/
+	public static String[][] blackHorizontalFlipRight(int blackRowInt, int blackColInt, String gameboard[][]) {
+		String[][] blackHorizontalFlipRightArray = new String[9][9];
+		blackHorizontalFlipRightArray = gameboard.clone();
+		int found = 0;
+		int count = 1;
+		blackHorizontalFlipRightArray[blackRowInt][blackColInt] = "B";
+		if (gameboard[blackRowInt][blackColInt + 1].contains("W")) {
+			while (found == 0) {
+				if (gameboard[blackRowInt][blackColInt + count].contains("B")) {
+					found = 1;
+				}
+				else if (gameboard[blackRowInt][blackColInt + count].contains("W")) {
+					blackHorizontalFlipRightArray[blackRowInt][blackColInt + count] = "B";
+					count++;
+				}
+			}
+		}
+		return blackHorizontalFlipRightArray;
+	}
+	public static String[][] blackHorizontalFlipLeft(int blackRowInt, int blackColInt, String gameboard[][]) {
+		String[][] blackHorizontalFlipLeftArray = new String[9][9];
+		blackHorizontalFlipLeftArray = gameboard.clone();
+		int found = 0;
+		int count = 1;
+		blackHorizontalFlipLeftArray[blackRowInt][blackColInt] = "B";
+		if (gameboard[blackRowInt][blackColInt - 1].contains("W")) {
+			while (found == 0) {
+				if (gameboard[blackRowInt][blackColInt - count].contains("B")) {
+					found = 1;
+				}
+				else if (gameboard[blackRowInt][blackColInt - count].contains("W")) {
+					blackHorizontalFlipLeftArray[blackRowInt][blackColInt - count] = "B";
+					count++;
+				}
+			}
+		}
+		return blackHorizontalFlipLeftArray;
+	}
+	public static String[][] blackVerticalFlipUp(int blackRowInt, int blackColInt, String gameboard[][]) {
+		String[][] blackVerticalFlipUpArray = new String[9][9];
+		blackVerticalFlipUpArray = gameboard.clone();
+		int found = 0;
+		int count = 1;
+		blackVerticalFlipUpArray[blackRowInt][blackColInt] = "B";
+		if (gameboard[blackRowInt - 1][blackColInt].contains("W")) {
+			while (found == 0) {
+				if (gameboard[blackRowInt - count][blackColInt].contains("B")) {
+					found = 1;
+				}
+				else if (gameboard[blackRowInt - count][blackColInt].contains("W")) {
+					blackVerticalFlipUpArray[blackRowInt - count][blackColInt] = "B";
+					count++;
+				}
+			}
+		}
+		return blackVerticalFlipUpArray;
+	}
+	public static String[][] blackVerticalFlipDown(int blackRowInt, int blackColInt, String gameboard[][]) {
+		String[][] blackVerticalFlipDownArray = new String[9][9];
+		blackVerticalFlipDownArray = gameboard.clone();
+		int found = 0;
+		int count = 1;
+		blackVerticalFlipDownArray[blackRowInt][blackColInt] = "B";
+		if (gameboard[blackRowInt + 1][blackColInt].contains("W")) {
+			while (found == 0) {
+				if (gameboard[blackRowInt + count][blackColInt].contains("B")) {
+					found = 1;
+				}
+				else if (gameboard[blackRowInt + count][blackColInt].contains("W")) {
+					blackVerticalFlipDownArray[blackRowInt + count][blackColInt] = "B";
+					count++;
+				}
+			}
+		}
+		return blackVerticalFlipDownArray;
+	}
+	public static String[][] blackDiagonalFlipUpLeft(int blackRowInt, int blackColInt, String gameboard[][]) {
+		String[][] blackDiagonalFlipUpLeftArray = new String[9][9];
+		blackDiagonalFlipUpLeftArray = gameboard.clone();
+		int found = 0;
+		int count = 1;
+		blackDiagonalFlipUpLeftArray[blackRowInt][blackColInt] = "B";
+		if (gameboard[blackRowInt - 1][blackColInt - 1].contains("W")) {
+			while (found == 0) {
+				if (gameboard[blackRowInt - count][blackColInt - count].contains("B")) {
+					found = 1;
+				}
+				else if (gameboard[blackRowInt - count][blackColInt - count].contains("W")) {
+					blackDiagonalFlipUpLeftArray[blackRowInt - count][blackColInt - count] = "B";
+					count++;
+				}
+			}
+		}
+		return blackDiagonalFlipUpLeftArray;
+	}
+	public static String[][] blackDiagonalFlipUpRight(int blackRowInt, int blackColInt, String gameboard[][]) {
+		String[][] blackDiagonalFlipUpRightArray = new String[9][9];
+		blackDiagonalFlipUpRightArray = gameboard.clone();
+		int found = 0;
+		int count = 1;
+		blackDiagonalFlipUpRightArray[blackRowInt][blackColInt] = "B";
+		if (gameboard[blackRowInt - 1][blackColInt + 1].contains("W")) {
+			while (found == 0) {
+				if (gameboard[blackRowInt - count][blackColInt + count].contains("B")) {
+					found = 1;
+				}
+				else if (gameboard[blackRowInt - count][blackColInt + count].contains("W")) {
+					blackDiagonalFlipUpRightArray[blackRowInt - count][blackColInt + count] = "B";
+					count++;
+				}
+			}
+		}
+		return blackDiagonalFlipUpRightArray;
+	}
+	public static String[][] blackDiagonalFlipDownLeft(int blackRowInt, int blackColInt, String gameboard[][]) {
+		String[][] blackDiagonalFlipDownLeftArray = new String[9][9];
+		blackDiagonalFlipDownLeftArray = gameboard.clone();
+		int found = 0;
+		int count = 1;
+		blackDiagonalFlipDownLeftArray[blackRowInt][blackColInt] = "B";
+		if (gameboard[blackRowInt + 1][blackColInt - 1].contains("W")) {
+			while (found == 0) {
+				if (gameboard[blackRowInt + count][blackColInt - count].contains("B")) {
+					found = 1;
+				}
+				else if (gameboard[blackRowInt + count][blackColInt - count].contains("W")) {
+					blackDiagonalFlipDownLeftArray[blackRowInt + count][blackColInt - count] = "B";
+					count++;
+				}
+			}
+		}
+		return blackDiagonalFlipDownLeftArray;
+	}
+	public static String[][] blackDiagonalFlipDownRight(int blackRowInt, int blackColInt, String gameboard[][]) {
+		String[][] blackDiagonalFlipDownRightArray = new String[9][9];
+		blackDiagonalFlipDownRightArray = gameboard.clone();
+		int found = 0;
+		int count = 1;
+		blackDiagonalFlipDownRightArray[blackRowInt][blackColInt] = "B";
+		if (gameboard[blackRowInt + 1][blackColInt + 1].contains("W")) {
+			while (found == 0) {
+				if (gameboard[blackRowInt + count][blackColInt + count].contains("B")) {
+					found = 1;
+				}
+				else if (gameboard[blackRowInt + count][blackColInt + count].contains("W")) {
+					blackDiagonalFlipDownRightArray[blackRowInt + count][blackColInt + count] = "B";
+					count++;
+				}
+			}
+		}
+		return blackDiagonalFlipDownRightArray;
+	}
+	/**
+
+
+
+
+	This is the end of flipping white tiles to black
+
+
+
+
+	**/
+	public static String[][] whiteHorizontalFlipRight(int whiteRowInt, int whiteColInt, String gameboard[][]) {
+		String[][] whiteHorizontalFlipRightArray = new String[9][9];
+		whiteHorizontalFlipRightArray = gameboard.clone();
+		int found = 0;
+		int count = 1;
+		whiteHorizontalFlipRightArray[whiteRowInt][whiteColInt] = "B";
+		if (gameboard[whiteRowInt][whiteColInt + 1].contains("W")) {
+			while (found == 0) {
+				if (gameboard[whiteRowInt][whiteColInt + count].contains("B")) {
+					found = 1;
+				}
+				else if (gameboard[whiteRowInt][whiteColInt + count].contains("W")) {
+					whiteHorizontalFlipRightArray[whiteRowInt][whiteColInt + count] = "B";
+					count++;
+				}
+			}
+		}
+		return whiteHorizontalFlipRightArray;
+	}
+	public static String[][] whiteHorizontalFlipLeft(int whiteRowInt, int whiteColInt, String gameboard[][]) {
+		String[][] whiteHorizontalFlipLeftArray = new String[9][9];
+		whiteHorizontalFlipLeftArray = gameboard.clone();
+		int found = 0;
+		int count = 1;
+		whiteHorizontalFlipLeftArray[whiteRowInt][whiteColInt] = "B";
+		if (gameboard[whiteRowInt][whiteColInt - 1].contains("W")) {
+			while (found == 0) {
+				if (gameboard[whiteRowInt][whiteColInt - count].contains("B")) {
+					found = 1;
+				}
+				else if (gameboard[whiteRowInt][whiteColInt - count].contains("W")) {
+					whiteHorizontalFlipLeftArray[whiteRowInt][whiteColInt - count] = "B";
+					count++;
+				}
+			}
+		}
+		return whiteHorizontalFlipLeftArray;
+	}
+	public static String[][] whiteVerticalFlipUp(int whiteRowInt, int whiteColInt, String gameboard[][]) {
+		String[][] whiteVerticalFlipUpArray = new String[9][9];
+		whiteVerticalFlipUpArray = gameboard.clone();
+		int found = 0;
+		int count = 1;
+		whiteVerticalFlipUpArray[whiteRowInt][whiteColInt] = "B";
+		if (gameboard[whiteRowInt - 1][whiteColInt].contains("W")) {
+			while (found == 0) {
+				if (gameboard[whiteRowInt - count][whiteColInt].contains("B")) {
+					found = 1;
+				}
+				else if (gameboard[whiteRowInt - count][whiteColInt].contains("W")) {
+					whiteVerticalFlipUpArray[whiteRowInt - count][whiteColInt] = "B";
+					count++;
+				}
+			}
+		}
+		return whiteVerticalFlipUpArray;
+	}
+	public static String[][] whiteVerticalFlipDown(int whiteRowInt, int whiteColInt, String gameboard[][]) {
+		String[][] whiteVerticalFlipDownArray = new String[9][9];
+		whiteVerticalFlipDownArray = gameboard.clone();
+		int found = 0;
+		int count = 1;
+		whiteVerticalFlipDownArray[whiteRowInt][whiteColInt] = "B";
+		if (gameboard[whiteRowInt + 1][whiteColInt].contains("W")) {
+			while (found == 0) {
+				if (gameboard[whiteRowInt + count][whiteColInt].contains("B")) {
+					found = 1;
+				}
+				else if (gameboard[whiteRowInt + count][whiteColInt].contains("W")) {
+					whiteVerticalFlipDownArray[whiteRowInt + count][whiteColInt] = "B";
+					count++;
+				}
+			}
+		}
+		return whiteVerticalFlipDownArray;
+	}
+	public static String[][] whiteDiagonalFlipUpLeft(int whiteRowInt, int whiteColInt, String gameboard[][]) {
+		String[][] whiteDiagonalFlipUpLeftArray = new String[9][9];
+		whiteDiagonalFlipUpLeftArray = gameboard.clone();
+		int found = 0;
+		int count = 1;
+		whiteDiagonalFlipUpLeftArray[whiteRowInt][whiteColInt] = "B";
+		if (gameboard[whiteRowInt - 1][whiteColInt - 1].contains("W")) {
+			while (found == 0) {
+				if (gameboard[whiteRowInt - count][whiteColInt - count].contains("B")) {
+					found = 1;
+				}
+				else if (gameboard[whiteRowInt - count][whiteColInt - count].contains("W")) {
+					whiteDiagonalFlipUpLeftArray[whiteRowInt - count][whiteColInt - count] = "B";
+					count++;
+				}
+			}
+		}
+		return whiteDiagonalFlipUpLeftArray;
+	}
+	public static String[][] whiteDiagonalFlipUpRight(int whiteRowInt, int whiteColInt, String gameboard[][]) {
+		String[][] whiteDiagonalFlipUpRightArray = new String[9][9];
+		whiteDiagonalFlipUpRightArray = gameboard.clone();
+		int found = 0;
+		int count = 1;
+		whiteDiagonalFlipUpRightArray[whiteRowInt][whiteColInt] = "B";
+		if (gameboard[whiteRowInt - 1][whiteColInt + 1].contains("W")) {
+			while (found == 0) {
+				if (gameboard[whiteRowInt - count][whiteColInt + count].contains("B")) {
+					found = 1;
+				}
+				else if (gameboard[whiteRowInt - count][whiteColInt + count].contains("W")) {
+					whiteDiagonalFlipUpRightArray[whiteRowInt - count][whiteColInt + count] = "B";
+					count++;
+				}
+			}
+		}
+		return whiteDiagonalFlipUpRightArray;
+	}
+	public static String[][] whiteDiagonalFlipDownLeft(int whiteRowInt, int whiteColInt, String gameboard[][]) {
+		String[][] whiteDiagonalFlipDownLeftArray = new String[9][9];
+		whiteDiagonalFlipDownLeftArray = gameboard.clone();
+		int found = 0;
+		int count = 1;
+		whiteDiagonalFlipDownLeftArray[whiteRowInt][whiteColInt] = "B";
+		if (gameboard[whiteRowInt + 1][whiteColInt - 1].contains("W")) {
+			while (found == 0) {
+				if (gameboard[whiteRowInt + count][whiteColInt - count].contains("B")) {
+					found = 1;
+				}
+				else if (gameboard[whiteRowInt + count][whiteColInt - count].contains("W")) {
+					whiteDiagonalFlipDownLeftArray[whiteRowInt + count][whiteColInt - count] = "B";
+					count++;
+				}
+			}
+		}
+		return whiteDiagonalFlipDownLeftArray;
+	}
+	public static String[][] whiteDiagonalFlipDownRight(int whiteRowInt, int whiteColInt, String gameboard[][]) {
+		String[][] whiteDiagonalFlipDownRightArray = new String[9][9];
+		whiteDiagonalFlipDownRightArray = gameboard.clone();
+		int found = 0;
+		int count = 1;
+		whiteDiagonalFlipDownRightArray[whiteRowInt][whiteColInt] = "B";
+		if (gameboard[whiteRowInt + 1][whiteColInt + 1].contains("W")) {
+			while (found == 0) {
+				if (gameboard[whiteRowInt + count][whiteColInt + count].contains("B")) {
+					found = 1;
+				}
+				else if (gameboard[whiteRowInt + count][whiteColInt + count].contains("W")) {
+					whiteDiagonalFlipDownRightArray[whiteRowInt + count][whiteColInt + count] = "B";
+					count++;
+				}
+			}
+		}
+		return whiteDiagonalFlipDownRightArray;
+	}      
+} //This is the class closing bracket don't fuck with it
